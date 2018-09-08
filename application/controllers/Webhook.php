@@ -16,11 +16,10 @@ class Webhook extends CI_Controller {
   private $signature;
   private $user;
 
-  function __construct()
+  public function __construct()
   {
     parent::__construct();
     $this->load->model('Tebakkode_m');
-
     // create bot object
     $httpClient = new CurlHTTPClient($_ENV['CHANNEL_ACCESS_TOKEN']);
     $this->bot  = new LINEBot($httpClient, ['channelSecret' => $_ENV['CHANNEL_SECRET']]);
@@ -95,9 +94,8 @@ class Webhook extends CI_Controller {
       $multiMessageBuilder->add($textMessageBuilder);
       $multiMessageBuilder->add($stickerMessageBuilder);
 
-
       // save user data
-      $ret = $this->Tebakkode_m->saveUser($profile);
+      $this->Tebakkode_m->saveUser($profile);
       file_put_contents('php://stderr', 'ret: '.$ret);
 
       // send reply message
