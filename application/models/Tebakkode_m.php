@@ -2,13 +2,13 @@
 
 class Tebakkode_m extends CI_Model {
 
-  function __construct(){
+  public function __construct(){
     parent::__construct();
     $this->load->database();
   }
 
   // Events Log
-  function log_events($signature, $body)
+  public function log_events($signature, $body)
   {
     $this->db->set('signature', $signature)
     ->set('events', $body)
@@ -18,13 +18,13 @@ class Tebakkode_m extends CI_Model {
   }
 
   // Users
-  function getUser($userId){
+  public function getUser($userId){
     $data = $this->db->where('user_id', $userId)->get('users')->row_array();
     if(count($data) > 0) return $data;
     return false;
   }
 
-  function saveUser($profile){
+  public function saveUser($profile){
     $this->db->set('user_id', $profile['userId'])
       ->set('display_name', $profile['displayName'])
       ->insert('users');
@@ -33,7 +33,7 @@ class Tebakkode_m extends CI_Model {
   }
 
   // Question
-  function getQuestion($questionNum){
+  public function getQuestion($questionNum){
     $data = $this->db->where('number', $questionNum)
       ->get('questions')
       ->row_array();
@@ -42,7 +42,7 @@ class Tebakkode_m extends CI_Model {
     return false;
   }
 
-  function isAnswerEqual($number, $answer){
+  public function isAnswerEqual($number, $answer){
     $this->db->where('number', $number)
      ->where('answer', $answer);
 
@@ -52,7 +52,7 @@ class Tebakkode_m extends CI_Model {
    return false;
   }
 
-  function setUserProgress($user_id, $newNumber){
+  public function setUserProgress($user_id, $newNumber){
     $this->db->set('number', $newNumber)
       ->where('user_id', $user_id)
       ->update('users');
@@ -60,7 +60,7 @@ class Tebakkode_m extends CI_Model {
     return $this->db->affected_rows();
   }
 
-  function setScore($user_id, $score){
+  public function setScore($user_id, $score){
     $this->db->set('score', $score)
       ->where('user_id', $user_id)
       ->update('users');

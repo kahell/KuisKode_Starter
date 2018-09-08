@@ -93,11 +93,14 @@ class Webhook extends CI_Controller {
       $multiMessageBuilder->add($textMessageBuilder);
       $multiMessageBuilder->add($stickerMessageBuilder);
 
-      // send reply message
-      $this->bot->replyMessage($event['replyToken'], $multiMessageBuilder);
 
       // save user data
-      $this->Tebakkode_m->saveUser($profile);
+      $ret = $this->Tebakkode_m->saveUser($profile);
+      $textMessageBuilder2 = new TextMessageBuilder($ret);
+      $multiMessageBuilder->add($textMessageBuilder2);
+
+      // send reply message
+      $this->bot->replyMessage($event['replyToken'], $multiMessageBuilder);
     }
   }
 
@@ -108,9 +111,9 @@ class Webhook extends CI_Controller {
       if(strtolower($userMessage) == 'mulai')
       {
         // reset score
-        $this->tebakkode_m->setScore($this->user['user_id'], 0);
+        $this->Tebakkode_m->setScore($this->user['user_id'], 0);
         // update number progress
-        $this->tebakkode_m->setUserProgress($this->user['user_id'], 1);
+        $this->Tebakkode_m->setUserProgress($this->user['user_id'], 1);
         // send question no.1
         $this->sendQuestion($event['replyToken'], 1);
       } else {
@@ -144,7 +147,7 @@ class Webhook extends CI_Controller {
 
   public function sendQuestion($replyToken, $questionNum=1){
     // get question from database
-    $question = $this->tebakkode_m->getQuestion($questionNum);
+    $question = $this->Tebakkode_m->getQuestion($questionNum);
 
     // prepare answer options
     for($opsi = "a"; $opsi <= "d"; $opsi++) {
@@ -164,9 +167,9 @@ class Webhook extends CI_Controller {
 
   private function checkAnswer($message, $replyToken){
     // if answer is true, increment score
-    if($this->tebakkode_m->isAnswerEqual($this->user['number'], $message)){
+    if($this->Tebakkode_m->isAnswerEqual($this->user['number'], $message)){
       $this->user['score']++;
-      $this->tebakkode_m->setScore($this->user['user_id'], $this->user['score']);
+      $this->Tebakkode_m->setScore($this->user['user_id'], $this->user['score']);
     }
 
     if($this->user['number'] < 10)
@@ -200,7 +203,7 @@ class Webhook extends CI_Controller {
 
       // send reply message
       $this->bot->replyMessage($replyToken, $multiMessageBuilder);
-      $this->tebakkode_m->setUserProgress($this->user['user_id'], 0);
+      $this->Tebakkode_m->setUserProgress($this->user['user_id'], 0);
     }
   }
 
