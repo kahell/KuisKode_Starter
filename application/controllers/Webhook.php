@@ -53,9 +53,7 @@ class Webhook extends CI_Controller {
 
         // get user data from database
         $this->user = $this->Tebakkode_m->getUser($event['source']['userId']);
-
-        file_put_contents('php://stderr', 'user: '.$this->user);
-
+        file_put_contents('php://stderr', 'Number: '.$this->user['number']);
         // if user not registered
         if(!$this->user) $this->followCallback($event);
         else {
@@ -96,7 +94,6 @@ class Webhook extends CI_Controller {
 
       // save user data
       $this->Tebakkode_m->saveUser($profile);
-      file_put_contents('php://stderr', 'ret: '.$ret);
 
       // send reply message
       $this->bot->replyMessage($event['replyToken'], $multiMessageBuilder);

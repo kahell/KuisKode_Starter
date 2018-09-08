@@ -20,7 +20,7 @@ class Tebakkode_m extends CI_Model {
   // Users
   public function getUser($userId){
     $data = $this->db->where('user_id', $userId)->get('users');
-    if($data->num_rows() > 0) return $data;
+    if($data->num_rows() > 0) return $data->row_array();
     return false;
   }
 
